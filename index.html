@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FlareFind - Username Checker</title>
-    <link rel="stylesheet" href="style.css?v=4">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body class="dark-theme">
@@ -115,7 +116,7 @@
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 let target = e.currentTarget;
-                if (target.id === 'premium-btn') return;
+                if (target.id === 'premium-btn' && !isPremium) return;
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
                 target.classList.add('active');
                 currentMode = target.dataset.mode;
@@ -135,7 +136,7 @@
             document.getElementById('payment-modal').classList.add('hidden');
             isPremium = true;
             const premBtn = document.getElementById('premium-btn');
-            premBtn.innerHTML = `Premium <svg class="icon-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+            premBtn.setAttribute('data-mode', 'premium');
             premBtn.classList.add('active');
             document.querySelectorAll('.tab-btn').forEach(b => { if(b !== premBtn) b.classList.remove('active')});
             currentMode = 'premium';
@@ -182,10 +183,11 @@
             isSearching = true;
             startBtn.innerText = "Stop Search";
             resultArea.classList.add('hidden');
+            resultArea.classList.remove('visible');
 
             while (isSearching) {
-                searchStatus.innerHTML = `<span class="waiting-text">Searching for a free username, please wait...</span>`;
                 let candidate = generateBeautifulUsername(currentMode);
+                searchStatus.innerHTML = `<div class="searching-loop">@${candidate} <span class="checking-label">checking...</span></div>`;
                 
                 try {
                     const response = await fetch(`/.netlify/functions/check?username=${candidate}`);
@@ -203,13 +205,18 @@
                         badge.innerText = currentMode === 'premium' ? "Premium Glass Tier" : `${currentMode} Letters Unique`;
 
                         resultArea.classList.remove('hidden');
-                        resultArea.scrollIntoView({ behavior: 'smooth' });
+                        setTimeout(() => {
+                            resultArea.classList.add('visible');
+                            resultArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 50);
                         break;
                     }
                 } catch (err) {
-                    console.error(err);
+                    isSearching = false;
+                    startBtn.innerText = "Start Search";
+                    searchStatus.innerText = "Error searching.";
                 }
-                await new Promise(resolve => setTimeout(resolve, 150));
+                await new Promise(resolve => setTimeout(resolve, 5));
             }
         });
     </script>
