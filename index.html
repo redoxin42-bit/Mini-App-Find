@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FlareFind - Username Checker</title>
-    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="style.css?v=4">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body class="dark-theme">
@@ -19,13 +19,14 @@
                 <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
                 <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
                 <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></svg>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
         </button>
     </header>
 
-    <main class="scroll-container" id="main-scroll">
+    <main class="scroll-container">
         
-        <section class="search-section" id="search-area">
+        <section class="search-section">
             
             <div class="section-subtitle">selection beautiful usernames</div>
 
@@ -34,18 +35,20 @@
                     <button class="tab-btn active" data-mode="5">5 Letters</button>
                     <button class="tab-btn" data-mode="6">6 Letters</button>
                     <button class="tab-btn" data-mode="random">Random</button>
-                    <button class="tab-btn premium-tab" id="premium-btn">Premium</button>
+                    <button class="tab-btn premium-tab" id="premium-btn">
+                        Premium
+                        <svg class="icon-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    </button>
                 </div>
             </div>
 
             <div class="morph-panel action-panel">
                 <div class="status-text" id="search-status">a search for username...</div>
-                
                 <button class="start-btn" id="start-search-btn">Start Search</button>
             </div>
 
             <div class="morph-panel result-panel hidden" id="result-area">
-                <div class="result-header">🎉 Found Rare Username!</div>
+                <div class="result-header">Found Rare Username!</div>
                 <div class="username-display" id="username-res">@username</div>
                 <div class="badge" id="rarity-badge">Fragment tier</div>
                 <a href="#" id="tg-link" target="_blank" class="claim-btn">Take Username</a>
@@ -55,12 +58,12 @@
 
         <section class="info-section">
             
-            <div class="morph-panel info-card visible">
+            <div class="morph-panel info-card">
                 <h3>Telegram Channel</h3>
                 <a href="https://t.me/FlareFind" target="_blank" class="link-item">@FlareFind</a>
             </div>
 
-            <div class="morph-panel info-card visible">
+            <div class="morph-panel info-card">
                 <h3>Support & Owner</h3>
                 <div class="contacts-grid">
                     <div class="contact-row">Support: <a href="https://t.me/ipunu" target="_blank" class="link-item">@ipunu</a></div>
@@ -68,7 +71,7 @@
                 </div>
             </div>
 
-            <div class="morph-panel info-card visible">
+            <div class="morph-panel info-card">
                 <h3>Кто мы</h3>
                 <p class="description">
                     Мы — передовая экосистема автоматического подбора и анализа уникальных доменных имён и юзернеймов в Telegram. FlareFind помогает находить эстетичные, легко запоминающиеся и свободные никнеймы до того, как они станут недоступны или уйдут на аукцион Fragment.
@@ -98,7 +101,6 @@
         let isPremium = false;
         let isSearching = false;
 
-        // Смена тем оформления
         const themeToggle = document.getElementById('theme-toggle');
         themeToggle.addEventListener('click', () => {
             if (document.body.classList.contains('dark-theme')) {
@@ -106,11 +108,10 @@
                 themeToggle.innerHTML = `<svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
             } else {
                 document.body.classList.replace('light-theme', 'dark-theme');
-                themeToggle.innerHTML = `<svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></svg>`;
+                themeToggle.innerHTML = `<svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
             }
         });
 
-        // Вкладки режимов
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 let target = e.currentTarget;
@@ -121,7 +122,6 @@
             });
         });
 
-        // Логика окна премиума
         document.getElementById('premium-btn').addEventListener('click', () => {
             if(isPremium) return;
             document.getElementById('payment-modal').classList.remove('hidden');
@@ -135,13 +135,12 @@
             document.getElementById('payment-modal').classList.add('hidden');
             isPremium = true;
             const premBtn = document.getElementById('premium-btn');
-            premBtn.innerText = `Premium ✅`;
+            premBtn.innerHTML = `Premium <svg class="icon-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
             premBtn.classList.add('active');
             document.querySelectorAll('.tab-btn').forEach(b => { if(b !== premBtn) b.classList.remove('active')});
             currentMode = 'premium';
         });
 
-        // Генерация ников
         function generateBeautifulUsername(mode) {
             const vowels = 'aeiou';
             const consonants = 'bcdfghjklmnprstvwxyz';
@@ -166,7 +165,6 @@
             return res;
         }
 
-        // Логика кнопки старта (С переделанным текстом ожидания)
         const startBtn = document.getElementById('start-search-btn');
         const searchStatus = document.getElementById('search-status');
         const resultArea = document.getElementById('result-area');
@@ -186,9 +184,7 @@
             resultArea.classList.add('hidden');
 
             while (isSearching) {
-                // Вместо вывода логов пишем красивую фразу ожидания
                 searchStatus.innerHTML = `<span class="waiting-text">Searching for a free username, please wait...</span>`;
-                
                 let candidate = generateBeautifulUsername(currentMode);
                 
                 try {
@@ -213,8 +209,7 @@
                 } catch (err) {
                     console.error(err);
                 }
-                // Небольшая задержка между запросами
-                await new Promise(resolve => setTimeout(resolve, 400));
+                await new Promise(resolve => setTimeout(resolve, 150));
             }
         });
     </script>
