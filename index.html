@@ -12,7 +12,7 @@
     <header class="header">
         <div class="logo">FlareFind</div>
         <button id="theme-toggle" class="theme-btn">
-            <span class="theme-icon">☀️</span>
+            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></svg>
         </button>
     </header>
 
@@ -20,12 +20,17 @@
         
         <section class="search-section" id="search-area">
             
+            <div class="section-subtitle">selection beautiful usernames</div>
+
             <div class="morph-panel main-controls">
                 <div class="tabs">
                     <button class="tab-btn active" data-mode="5">5 Letters</button>
                     <button class="tab-btn" data-mode="6">6 Letters</button>
                     <button class="tab-btn" data-mode="random">Random</button>
-                    <button class="tab-btn premium-tab" id="premium-btn">Premium ⭐️</button>
+                    <button class="tab-btn premium-tab" id="premium-btn">
+                        <span>Premium</span>
+                        <svg class="icon-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    </button>
                 </div>
             </div>
 
@@ -56,8 +61,8 @@
             <div class="morph-panel info-card fade-in-card">
                 <h3>Support & Owner</h3>
                 <div class="contacts-grid">
-                    <div>Support: <a href="https://t.me/ipunu" target="_blank" class="link-item">@ipunu</a></div>
-                    <div>Owner: <a href="https://t.me/pingyandex" target="_blank" class="link-item">@pingyandex</a></div>
+                    <div class="contact-row">Support: <a href="https://t.me/ipunu" target="_blank" class="link-item">@ipunu</a></div>
+                    <div class="contact-row">Owner: <a href="https://t.me/pingyandex" target="_blank" class="link-item">@pingyandex</a></div>
                 </div>
             </div>
 
@@ -73,7 +78,7 @@
 
     <div class="modal-overlay hidden" id="payment-modal">
         <div class="morph-panel modal-content">
-            <div class="stars-icon">⭐️</div>
+            <svg class="modal-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
             <h2>Покупка Premium</h2>
             <p>Разблокируйте доступ к генерации сверхредких 5-значных ников с премиальным созвучием (Fragment-style).</p>
             <div class="price">50 Stars</div>
@@ -86,40 +91,38 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand(); // Разворачиваем Mini App на весь экран
+        tg.expand();
 
         let currentMode = '5';
         let isPremium = false;
         let isSearching = false;
 
-        // Переключение тем
+        // Переключение тем с заменой иконки внутри SVG
         const themeToggle = document.getElementById('theme-toggle');
         themeToggle.addEventListener('click', () => {
             if (document.body.classList.contains('dark-theme')) {
                 document.body.classList.replace('dark-theme', 'light-theme');
-                themeToggle.innerHTML = '<span class="theme-icon">🌙</span>';
+                themeToggle.innerHTML = `<svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
             } else {
                 document.body.classList.replace('light-theme', 'dark-theme');
-                themeToggle.innerHTML = '<span class="theme-icon">☀️</span>';
+                themeToggle.innerHTML = `<svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></svg>`;
             }
         });
 
-        // Управление вкладками режима генерации
+        // Управление вкладками
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                if (e.target.id === 'premium-btn') return; // Отдельная логика для премиума
+                let target = e.currentTarget;
+                if (target.id === 'premium-btn') return;
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentMode = btn.dataset.mode;
+                target.classList.add('active');
+                currentMode = target.dataset.mode;
             });
         });
 
-        // Кастомное окно оплаты Stars
+        // Модалка премиума
         document.getElementById('premium-btn').addEventListener('click', () => {
-            if(isPremium) {
-                alert("У вас уже активен Premium режим!");
-                return;
-            }
+            if(isPremium) return;
             document.getElementById('payment-modal').classList.remove('hidden');
         });
 
@@ -128,19 +131,16 @@
         });
 
         document.getElementById('confirm-pay').addEventListener('click', () => {
-            // Реальное взаимодействие с TG Stars (инвойс), если бэкенд настроен. 
-            // Пока имитируем успешный колбэк:
             document.getElementById('payment-modal').classList.add('hidden');
             isPremium = true;
             const premBtn = document.getElementById('premium-btn');
-            premBtn.innerText = "Premium ✅";
+            premBtn.innerHTML = `<span>Premium ✅</span>`;
             premBtn.classList.add('active');
             document.querySelectorAll('.tab-btn').forEach(b => { if(b !== premBtn) b.classList.remove('active')});
             currentMode = 'premium';
-            alert("Оплата 50 Звезд прошла успешно! Доступен поиск красивых Fragment-линков.");
         });
 
-        // Анимация скролла (уход текста вверх, появление инфо-карт)
+        // Контроль скролла (анимационный уход элементов вверх)
         const mainScroll = document.getElementById('main-scroll');
         const searchArea = document.getElementById('search-area');
         const infoCards = document.querySelectorAll('.fade-in-card');
@@ -148,20 +148,18 @@
         mainScroll.addEventListener('scroll', () => {
             let scrollTop = mainScroll.scrollTop;
             
-            // Плавное исчезновение верхнего блока
-            if (scrollTop > 20) {
-                let opacity = 1 - (scrollTop / 180);
+            if (scrollTop > 10) {
+                let opacity = 1 - (scrollTop / 200);
                 searchArea.style.opacity = Math.max(opacity, 0);
-                searchArea.style.transform = `translateY(-${scrollTop * 0.2}px)`;
+                searchArea.style.transform = `translateY(-${scrollTop * 0.25}px) scale(${1 - (scrollTop*0.001)})`;
             } else {
                 searchArea.style.opacity = 1;
-                searchArea.style.transform = `translateY(0px)`;
+                searchArea.style.transform = `translateY(0px) scale(1)`;
             }
 
-            // Плавное появление нижних карточек
             infoCards.forEach(card => {
                 let cardTop = card.getBoundingClientRect().top;
-                if (cardTop < window.innerHeight - 50) {
+                if (cardTop < window.innerHeight - 60) {
                     card.classList.add('visible');
                 } else {
                     card.classList.remove('visible');
@@ -169,15 +167,13 @@
             });
         });
 
-        // ГЕНЕРАТОР КРАСИВЫХ (ЧИТАЕМЫХ) НИКНЕЙМОВ
-        function generateBeautifulUsername(length, mode) {
+        // Генератор красивых слогов
+        function generateBeautifulUsername(mode) {
             const vowels = 'aeiou';
             const consonants = 'bcdfghjklmnprstvwxyz';
             let res = '';
 
-            // Если премиум или специальный красивый режим, собираем по слогам (CVCV / CVCVC)
             if (mode === '5' || mode === 'premium') {
-                // Генерация читаемого 5-знака типа 'vilor', 'mikan', 'bared'
                 for (let i = 0; i < 5; i++) {
                     res += (i % 2 === 0) ? consonants[Math.floor(Math.random() * consonants.length)] : vowels[Math.floor(Math.random() * vowels.length)];
                 }
@@ -188,17 +184,16 @@
                     else res += consonants[Math.floor(Math.random() * consonants.length)];
                 }
             } else {
-                // Полный рандом
                 const allChars = 'abcdefghijklmnopqrstuvwxyz0123456789_';
-                let currentLength = length === 'random' ? Math.floor(Math.random() * 3) + 5 : parseInt(length);
-                for (let i = 0; i < currentLength; i++) {
+                let len = Math.floor(Math.random() * 3) + 5;
+                for (let i = 0; i < len; i++) {
                     res += allChars[Math.floor(Math.random() * allChars.length)];
                 }
             }
             return res;
         }
 
-        // РЕАЛЬНЫЙ ЦИКЛ ПОИСКА ЧЕРЕЗ NETLIFY FUNCTION
+        // Логика работы кнопки поиска
         const startBtn = document.getElementById('start-search-btn');
         const searchStatus = document.getElementById('search-status');
         const scanLog = document.getElementById('scan-log');
@@ -215,29 +210,26 @@
             }
 
             isSearching = true;
-            startBtn.innerText = "Stop";
+            startBtn.innerText = "Stop Search";
             resultArea.classList.add('hidden');
             scanLog.innerHTML = '';
 
             while (isSearching) {
-                let userCandidate = generateBeautifulUsername(currentMode, currentMode);
-                searchStatus.innerText = `Checking @${userCandidate}...`;
+                let candidate = generateBeautifulUsername(currentMode);
+                searchStatus.innerText = `Checking @${candidate}...`;
                 
                 try {
-                    // Отправляем запрос на нашу серверную функцию Netlify
-                    const response = await fetch(`/.netlify/functions/check?username=${userCandidate}`);
+                    const response = await fetch(`/.netlify/functions/check?username=${candidate}`);
                     const data = await response.json();
 
                     if (data.available) {
-                        // Юзернейм свободен! Выводим результат
                         isSearching = false;
                         startBtn.innerText = "Start Search";
                         searchStatus.innerText = "Username found!";
                         
-                        usernameRes.innerText = `@${userCandidate}`;
-                        tgLink.href = `https://t.me/${userCandidate}`;
+                        usernameRes.innerText = `@${candidate}`;
+                        tgLink.href = `https://t.me/${candidate}`;
                         
-                        // Меняем бейдж редкости в зависимости от длины
                         const badge = document.getElementById('rarity-badge');
                         badge.innerText = currentMode === 'premium' ? "Fragment Rare Tier" : `${currentMode} Letters Unique`;
 
@@ -245,20 +237,16 @@
                         resultArea.scrollIntoView({ behavior: 'smooth' });
                         break;
                     } else {
-                        // Занят, пишем в микро-лог и идем дальше
                         let logItem = document.createElement('div');
                         logItem.className = 'log-entry';
-                        logItem.innerHTML = `<span>@${userCandidate}</span> <span class="taken">taken ❌</span>`;
+                        logItem.innerHTML = `<span>@${candidate}</span> <span class="taken">taken ❌</span>`;
                         scanLog.prepend(logItem);
                         
-                        // Лимит строк в логе, чтобы не вешать мобилу
-                        if(scanLog.children.length > 5) scanLog.lastChild.remove();
+                        if(scanLog.children.length > 4) scanLog.lastChild.remove();
                     }
                 } catch (err) {
-                    console.error("Error checking username:", err);
+                    console.error(err);
                 }
-
-                // Маленькая пауза между запросами для стабильности
                 await new Promise(resolve => setTimeout(resolve, 350));
             }
         });
