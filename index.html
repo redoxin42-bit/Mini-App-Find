@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>FlareFind - Username Checker</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body class="dark-theme">
 
-    <div class="bg-glow"></div>
+    <div class="glass-bg-glow"></div>
 
     <header class="header">
         <div class="logo">FlareFind</div>
         <button id="theme-toggle" class="theme-btn">
-            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
-                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-            </svg>
+            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></svg>
         </button>
     </header>
 
@@ -32,17 +34,12 @@
                     <button class="tab-btn active" data-mode="5">5 Letters</button>
                     <button class="tab-btn" data-mode="6">6 Letters</button>
                     <button class="tab-btn" data-mode="random">Random</button>
-                    <button class="tab-btn premium-tab" id="premium-btn">
-                        <span>Premium</span>
-                        <svg class="icon-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-                    </button>
+                    <button class="tab-btn premium-tab" id="premium-btn">Premium</button>
                 </div>
             </div>
 
             <div class="morph-panel action-panel">
                 <div class="status-text" id="search-status">a search for username...</div>
-                
-                <div class="scan-log" id="scan-log"></div>
                 
                 <button class="start-btn" id="start-search-btn">Start Search</button>
             </div>
@@ -58,12 +55,12 @@
 
         <section class="info-section">
             
-            <div class="morph-panel info-card fade-in-card">
+            <div class="morph-panel info-card visible">
                 <h3>Telegram Channel</h3>
                 <a href="https://t.me/FlareFind" target="_blank" class="link-item">@FlareFind</a>
             </div>
 
-            <div class="morph-panel info-card fade-in-card">
+            <div class="morph-panel info-card visible">
                 <h3>Support & Owner</h3>
                 <div class="contacts-grid">
                     <div class="contact-row">Support: <a href="https://t.me/ipunu" target="_blank" class="link-item">@ipunu</a></div>
@@ -71,7 +68,7 @@
                 </div>
             </div>
 
-            <div class="morph-panel info-card fade-in-card">
+            <div class="morph-panel info-card visible">
                 <h3>Кто мы</h3>
                 <p class="description">
                     Мы — передовая экосистема автоматического подбора и анализа уникальных доменных имён и юзернеймов в Telegram. FlareFind помогает находить эстетичные, легко запоминающиеся и свободные никнеймы до того, как они станут недоступны или уйдут на аукцион Fragment.
@@ -83,9 +80,8 @@
 
     <div class="modal-overlay hidden" id="payment-modal">
         <div class="morph-panel modal-content">
-            <svg class="modal-star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
             <h2>Покупка Premium</h2>
-            <p>Разблокируйте доступ к генерации сверхредких 5-значных ников с премиальным созвучием (Fragment-style).</p>
+            <p>Разблокируйте доступ к генерации редких 5-значных ников повышенного качества.</p>
             <div class="price">50 Stars</div>
             <div class="modal-actions">
                 <button class="pay-btn" id="confirm-pay">Pay Now</button>
@@ -102,26 +98,19 @@
         let isPremium = false;
         let isSearching = false;
 
-        // Переключение тем с красивыми SVG-иконками
+        // Смена тем оформления
         const themeToggle = document.getElementById('theme-toggle');
         themeToggle.addEventListener('click', () => {
             if (document.body.classList.contains('dark-theme')) {
                 document.body.classList.replace('dark-theme', 'light-theme');
-                themeToggle.innerHTML = `
-                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="currentColor"></path>
-                    </svg>`;
+                themeToggle.innerHTML = `<svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
             } else {
                 document.body.classList.replace('light-theme', 'dark-theme');
-                themeToggle.innerHTML = `
-                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="4" fill="currentColor"></circle>
-                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-                    </svg>`;
+                themeToggle.innerHTML = `<svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></svg>`;
             }
         });
 
-        // Вкладки
+        // Вкладки режимов
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 let target = e.currentTarget;
@@ -132,6 +121,7 @@
             });
         });
 
+        // Логика окна премиума
         document.getElementById('premium-btn').addEventListener('click', () => {
             if(isPremium) return;
             document.getElementById('payment-modal').classList.remove('hidden');
@@ -145,45 +135,17 @@
             document.getElementById('payment-modal').classList.add('hidden');
             isPremium = true;
             const premBtn = document.getElementById('premium-btn');
-            premBtn.innerHTML = `<span>Premium ✅</span>`;
+            premBtn.innerText = `Premium ✅`;
             premBtn.classList.add('active');
             document.querySelectorAll('.tab-btn').forEach(b => { if(b !== premBtn) b.classList.remove('active')});
             currentMode = 'premium';
         });
 
-        // Скролл-анимация растворения
-        const mainScroll = document.getElementById('main-scroll');
-        const searchArea = document.getElementById('search-area');
-        const infoCards = document.querySelectorAll('.fade-in-card');
-
-        mainScroll.addEventListener('scroll', () => {
-            let scrollTop = mainScroll.scrollTop;
-            
-            if (scrollTop > 10) {
-                let opacity = 1 - (scrollTop / 180);
-                searchArea.style.opacity = Math.max(opacity, 0);
-                searchArea.style.transform = `translateY(-${scrollTop * 0.3}px) scale(${1 - (scrollTop * 0.0015)})`;
-            } else {
-                searchArea.style.opacity = 1;
-                searchArea.style.transform = `translateY(0px) scale(1)`;
-            }
-
-            infoCards.forEach(card => {
-                let cardTop = card.getBoundingClientRect().top;
-                if (cardTop < window.innerHeight - 60) {
-                    card.classList.add('visible');
-                } else {
-                    card.classList.remove('visible');
-                }
-            });
-        });
-
-        // Читаемый генератор ников
+        // Генерация ников
         function generateBeautifulUsername(mode) {
             const vowels = 'aeiou';
             const consonants = 'bcdfghjklmnprstvwxyz';
             let res = '';
-
             if (mode === '5' || mode === 'premium') {
                 for (let i = 0; i < 5; i++) {
                     res += (i % 2 === 0) ? consonants[Math.floor(Math.random() * consonants.length)] : vowels[Math.floor(Math.random() * vowels.length)];
@@ -204,10 +166,9 @@
             return res;
         }
 
-        // Кнопка поиска
+        // Логика кнопки старта (С переделанным текстом ожидания)
         const startBtn = document.getElementById('start-search-btn');
         const searchStatus = document.getElementById('search-status');
-        const scanLog = document.getElementById('scan-log');
         const resultArea = document.getElementById('result-area');
         const usernameRes = document.getElementById('username-res');
         const tgLink = document.getElementById('tg-link');
@@ -223,11 +184,12 @@
             isSearching = true;
             startBtn.innerText = "Stop Search";
             resultArea.classList.add('hidden');
-            scanLog.innerHTML = '';
 
             while (isSearching) {
+                // Вместо вывода логов пишем красивую фразу ожидания
+                searchStatus.innerHTML = `<span class="waiting-text">Searching for a free username, please wait...</span>`;
+                
                 let candidate = generateBeautifulUsername(currentMode);
-                searchStatus.innerText = `Checking @${candidate}...`;
                 
                 try {
                     const response = await fetch(`/.netlify/functions/check?username=${candidate}`);
@@ -242,23 +204,17 @@
                         tgLink.href = `https://t.me/${candidate}`;
                         
                         const badge = document.getElementById('rarity-badge');
-                        badge.innerText = currentMode === 'premium' ? "Fragment Rare Tier" : `${currentMode} Letters Unique`;
+                        badge.innerText = currentMode === 'premium' ? "Premium Glass Tier" : `${currentMode} Letters Unique`;
 
                         resultArea.classList.remove('hidden');
                         resultArea.scrollIntoView({ behavior: 'smooth' });
                         break;
-                    } else {
-                        let logItem = document.createElement('div');
-                        logItem.className = 'log-entry';
-                        logItem.innerHTML = `<span>@${candidate}</span> <span class="taken">taken ❌</span>`;
-                        scanLog.prepend(logItem);
-                        
-                        if(scanLog.children.length > 4) scanLog.lastChild.remove();
                     }
                 } catch (err) {
                     console.error(err);
                 }
-                await new Promise(resolve => setTimeout(resolve, 350));
+                // Небольшая задержка между запросами
+                await new Promise(resolve => setTimeout(resolve, 400));
             }
         });
     </script>
